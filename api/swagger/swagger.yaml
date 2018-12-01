@@ -1,0 +1,326 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Netflix API
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  # - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+tags:
+  - name: 'Users'
+    description: Operations about Netflix Users
+  - name: 'Authentication'
+    description: Authentication operations
+  - name: 'Videos'
+    description: Operations about Netflix Videos
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: X-Session-ID
+paths:
+  /users:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: users
+    post:
+      description: Creates a new user with a pair of credentials
+      # used as the method name of the controller
+      operationId: createUser
+      tags:
+      - "Users"
+      parameters:
+        - name: user
+          in: body
+          description: The user to create
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/CreateUserResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      description: Creates a new user with a pair of credentials
+      # used as the method name of the controller
+      operationId: deleteUser
+      tags:
+      - "Users"
+      parameters:
+        - name: user
+          in: body
+          description: delete
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DeleteUserResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    get:
+      description: Creates a new user with a pair of credentials
+      # used as the method name of the controller
+      operationId: getUser
+      tags:
+      - "Users"
+      parameters: []
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+            # a pointer to a definition
+              $ref: "#/definitions/GetUserResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /authentication/login:
+    x-swagger-router-controller: authentication
+    post:
+      description: Authenticates a user with a pair of credentials and returns a sessionID
+      operationId: login
+      tags:
+      - "Authentication"
+      parameters:
+        - name: credentials
+          in: body
+          description: Credentials to authentication the user with
+          required: true
+          schema:
+            $ref: "#/definitions/Credentials"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/AuthenticationResponse"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /authentication/logout:
+    x-swagger-router-controller: authentication
+    get:
+      description: Authenticates a user with a pair of credentials and returns a sessionID
+      operationId: logout
+      tags:
+      - "Authentication"
+      parameters:
+        - name: X-SESSION-ID
+          in: header
+          description: Session ID
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/AuthenticationResponse"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /products:
+    x-swagger-router-controller: products
+    get:
+      description: Find products
+      operationId: getProducts
+      tags:
+      - "Products"
+      security:
+      - ApiKeyAuth: []
+      parameters: []
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: 'array'
+            items:
+              # a pointer to a definition
+              $ref: "#/definitions/Product"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /products/{productName}:
+    get:
+      description: Get product with the given name
+      operationId: findProduct
+      tags:
+      - "Products"
+      parameters:
+        - name: productName
+          in: path
+          description: Product name
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/Product"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse" 
+  /products/addProduct:
+    x-swagger-router-controller: products
+    post:
+      description: Create product
+      operationId: createProduct
+      tags:
+      - "Products"
+      parameters:
+        - name: x-session-id
+          in: header
+          description: Session ID
+          required: true
+          type: string
+        - name: projectToAdd
+          required: true
+          in: body
+          description: adding product
+          schema:
+            $ref: "#/definitions/Product"
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              # a pointer to a definition
+              $ref: "#/definitions/Product"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse" 
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  User:
+    required:
+      - username
+      - password
+    properties:
+      username:
+        type: string
+        example: 'jwalker'
+      password:
+        type: string
+        example: 'supersecret'
+      fullname:
+        type: string
+        example: 'Johnny Walker'
+  CreateUserResponse:
+    properties:
+      _id:
+        type: string
+        example: '123'
+  Credentials:
+    required:
+      - username
+      - password
+    properties:
+      username:
+        type: string
+        example: 'jwalker'
+      password:
+        type: string
+        example: 'supersecret'
+  AuthenticationResponse:
+    required:
+      - sessionID
+    properties:
+      sessionID:
+        type: string
+        example: 'axd43xs'
+  Product:
+    required:
+      - name
+      - cost
+    properties:
+      _id:
+        type: string
+        example: '12'
+      name:
+        type: string
+        example: 'Avengers Infinity War'
+      cost:
+        type: integer
+        format: int64
+        example: 1234
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  DeleteUserResponse:
+    required:
+      - username
+    properties:
+      username:
+        type: string
+  GetUserResponse:
+    required:
+        - username
+    properties:
+      username:
+        type: string
+        example: 'jwalker'
+    
