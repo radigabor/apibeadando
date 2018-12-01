@@ -11,8 +11,11 @@ function createUser(req, res) {
     try {
         var User = {
             username: req.body.username,
-            password: req.body.password
+            password: req.body.password,
         };
+        if(User.balance == null ){
+            User.balance = 0;
+        }
         var x = db.createObject('users', User);
         return res.json(x._id);
     } catch (error) {
