@@ -237,7 +237,7 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse" 
-  /balance/{username}':
+  /users/balance/{username}:
     x-swagger-router-controller: balance
     put:
       tags:
@@ -252,22 +252,17 @@ paths:
         - name: username
           in: path
           description: name whos balance needs to be updated
-          required: true
           type: string
-        - in: query
-          name: amount
-          description: Updated amount
-          type: integer
           required: true
       responses:
         '200':
           description: successful operation
           schema:
-            $ref: '#/definitions/Balance'
+            $ref: '#/definitions/User'
         '400':
           description: Invalid amount supplied
         '404':
-          description: User not found
+          description: User balance not found
     get:
       tags:
         - balance
@@ -283,14 +278,14 @@ paths:
       parameters:
         - name: username
           in: path
-          description: The user name for login
+          description: The user name for getting balance
           required: true
           type: string
       responses:
         '200':
           description: successful operation
           schema:
-            $ref: '#/definitions/Balance'
+            $ref: '#/definitions/User'
         '405':
           description: Invalid input
   /swagger:
@@ -311,6 +306,10 @@ definitions:
       fullname:
         type: string
         example: 'Johnny Walker'
+      balance:
+        type: integer
+        format: int64
+        default: 0
   CreateUserResponse:
     properties:
       _id:
@@ -370,16 +369,3 @@ definitions:
       username:
         type: string
         example: 'jwalker'
-  Balance:
-    type: object
-    required:
-      - owner
-      - balance
-    properties:
-      owner:
-        type: string
-      balance:
-        type: integer
-        format: int64
-    xml:
-      name: Balance
