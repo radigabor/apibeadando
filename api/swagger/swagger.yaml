@@ -185,35 +185,6 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /products/{productName}:
-    get:
-      description: Get product with the given name
-      operationId: findProduct
-      tags:
-      - "Products"
-      parameters:
-        - name: productName
-          in: path
-          description: Product name
-          required: true
-          type: string
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/Product"
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-        # responses may fall through to errors
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse" 
-  /products/addProduct:
-    x-swagger-router-controller: products
     post:
       description: Create product
       operationId: createProduct
@@ -239,6 +210,33 @@ paths:
             items:
               # a pointer to a definition
               $ref: "#/definitions/Product"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse" 
+  /products/{productName}:
+    get:
+      description: Get product with the given name
+      operationId: findProduct
+      tags:
+      - "Products"
+      parameters:
+        - name: productName
+          in: path
+          description: Product name
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/Product"
         "401":
           description: Unauthorized
           schema:
