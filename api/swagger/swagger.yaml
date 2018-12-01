@@ -292,9 +292,6 @@ definitions:
       - name
       - cost
     properties:
-      _id:
-        type: string
-        example: '12'
       name:
         type: string
         example: 'Avengers Infinity War'
