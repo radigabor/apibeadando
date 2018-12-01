@@ -165,8 +165,6 @@ paths:
       operationId: getProducts
       tags:
       - "Products"
-      security:
-      - ApiKeyAuth: []
       parameters: []
       responses:
         "200":
@@ -191,12 +189,7 @@ paths:
       tags:
       - "Products"
       parameters:
-        - name: x-session-id
-          in: header
-          description: Session ID
-          required: true
-          type: string
-        - name: projectToAdd
+        - name: product
           required: true
           in: body
           description: adding product
@@ -206,10 +199,8 @@ paths:
         "200":
           description: Success
           schema:
-            type: array
-            items:
-              # a pointer to a definition
-              $ref: "#/definitions/Product"
+            # a pointer to a definition
+            $ref: "#/definitions/CreateProductResponse"
         "401":
           description: Unauthorized
           schema:
@@ -265,6 +256,11 @@ definitions:
         type: string
         example: 'Johnny Walker'
   CreateUserResponse:
+    properties:
+      _id:
+        type: string
+        example: '123'
+  CreateProductResponse:
     properties:
       _id:
         type: string
