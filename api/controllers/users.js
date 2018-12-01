@@ -11,11 +11,15 @@ module.exports = {
 
 function createUser(req, res) {
     try {
+        console.log("szar fos");
+
         var User = {
             username: req.body.username,
             password: req.body.password,
         };
-        if(User.balance == null ){
+        if(req.body.balance != null || req.body.balance != ""){
+            User.balance = req.body.balance;
+        }else {
             User.balance = 0;
         }
         var x = db.createObject('users', User);
@@ -55,7 +59,7 @@ function getUser(req, res) {
   
 function getBalance(req, res) {
     try {
-        var user_balance = req.params.username;
+        var user_balance = req.body.username;
         var x = db.getObject('users', user_balance);
         return res.json(x);
     } catch (error) {
@@ -67,15 +71,28 @@ function getBalance(req, res) {
   
 function updateBalance(req, res) {
     try {
+        console.log("sya");
         var username = req.body.username;
         var amount = req.body.amount;
         
-        var updated_user = db.getObject('users', username);
-        updated_user[0].balance += amount;             
+        updated_user = db.getObject('users', {});
 
-        db.updateObject('users', username, updated_user);
-        var x = db.getObjects('users', username);
-        return res.json(x);
+        console.log("username", updated_user);
+        
+        var User = {
+            username: updated_user.username,
+            password: updated_user.password,
+            balance: updated_user.balance + amount
+        };
+        console.log("sya1.1: ", User.username);
+        console.log("sya1.1: ", User.password);
+        console.log("sya1.2:", User.balance);
+        console.log("sya1");
+        db.updateObject('users',{username:username}, User)
+        updated_user = db.getObject('users', {username:username});
+        console.log("username", updated_user);
+        console.log("sya2");
+        return res.json(updated_user);
     } catch (error) {
         return res.send(400, {
             message: error.message
