@@ -11,8 +11,6 @@ module.exports = {
 
 function createUser(req, res) {
     try {
-        console.log("szar fos");
-
         var User = {
             username: req.body.username,
             password: req.body.password,
@@ -71,27 +69,18 @@ function getBalance(req, res) {
   
 function updateBalance(req, res) {
     try {
-        console.log("sya");
         var username = req.body.username;
         var amount = req.body.amount;
         
-        updated_user = db.getObject('users', {});
-
-        console.log("username", updated_user);
+        old_user = db.getObject('users', {username:username});
         
         var User = {
-            username: updated_user.username,
-            password: updated_user.password,
-            balance: updated_user.balance + amount
-        };
-        console.log("sya1.1: ", User.username);
-        console.log("sya1.1: ", User.password);
-        console.log("sya1.2:", User.balance);
-        console.log("sya1");
+            username: old_user.username,
+            password: old_user.password,
+            balance: old_user.balance + amount
+        };        
         db.updateObject('users',{username:username}, User)
         updated_user = db.getObject('users', {username:username});
-        console.log("username", updated_user);
-        console.log("sya2");
         return res.json(updated_user);
     } catch (error) {
         return res.send(400, {
