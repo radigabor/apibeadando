@@ -30,12 +30,8 @@ function createUser(req, res) {
   }
   
 function deleteUser(req, res) {
-    try {
-        var User = {
-            username: req.body.username,
-            password: req.body.password
-        };
-        var x = db.deleteObject('users', User);
+    try {        
+        var x = db.deleteObject('users', {username:req.body.username});
         return res.json(x._id);
     } catch (error) {
         return res.send(400, {
@@ -56,10 +52,13 @@ function getUser(req, res) {
   }
   
 function getBalance(req, res) {
-    try {
-        var user_balance = req.body.username;
-        var x = db.getObject('users', user_balance);
-        return res.json(x);
+    try {        
+        
+        console.log("reqpath:", req.swagger.params.username.value);
+        var x = db.getObject('users', {username:req.swagger.params.username.value});
+        console.log("x:", x);
+        console.log("xb:", x.balance);
+        return res.json(x.balance);
     } catch (error) {
         return res.send(400, {
             message: error.message
