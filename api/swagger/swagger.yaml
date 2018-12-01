@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   version: "0.0.1"
-  title: Netflix API
+  title: Penztarca API
 # during dev, should point to your local machine
 host: localhost:10010
 # basePath prefixes all resource paths 
@@ -237,7 +237,7 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse" 
-  /users/balance:
+  /users/balance/{username}:
     x-swagger-router-controller: users
     put:
       tags:
@@ -249,12 +249,17 @@ paths:
         - application/xml
         - application/json
       parameters:
-        - name: updateCredentials
+        - name: username
+          in: path
+          description: name that need to be updated
           required: true
-          in: body
-          description: Credentials to update the user with
+          type: string
+        - in: body
+          name: amount
+          description: Updated user object
+          required: true
           schema:
-            $ref: "#/definitions/UpdateBalanceCredentials"
+            $ref: '#/definitions/UpdateBalanceCredentials'
       responses:
         '200':
           description: successful operation
@@ -278,7 +283,7 @@ paths:
         - application/json
       parameters:
         - name: username
-          in: header
+          in: path
           description: The user name for getting balance
           required: true
           type: string
