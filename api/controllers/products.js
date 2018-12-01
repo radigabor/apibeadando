@@ -52,9 +52,9 @@ function getProducts(req, res) {
   
 function findProduct(req, res) {
     try {        
-        var productName = req.body.name;
-        var x = db.getObjects('products');
-        return res.json(x, productName);
+        var productName = req.params.productName;
+        var x = db.getObject('products', productName);
+        return res.json(x);
     } catch (error) {
         return res.send(400, {
             message: error.message
