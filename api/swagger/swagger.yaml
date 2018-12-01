@@ -237,7 +237,7 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse" 
-  /users/balance/{username}:
+  /users/balance:
     x-swagger-router-controller: balance
     put:
       tags:
@@ -249,16 +249,12 @@ paths:
         - application/xml
         - application/json
       parameters:
-        - name: username
-          in: path
-          description: name whos balance needs to be updated
-          type: string
+        - name: updateCredentials
           required: true
-        - name: balance
           in: body
-          description: Updated amount
-          type: integer
-          required: true
+          description: Credentials to update the user with
+          schema:
+            $ref: "#/definitions/UpdateBalanceCredentials"
       responses:
         '200':
           description: successful operation
@@ -282,7 +278,7 @@ paths:
         - application/json
       parameters:
         - name: username
-          in: path
+          in: header
           description: The user name for getting balance
           required: true
           type: string
@@ -374,3 +370,15 @@ definitions:
       username:
         type: string
         example: 'jwalker'
+  UpdateBalanceCredentials:
+    required:
+      - username
+      - amount
+    properties:
+      username:
+        type: string
+        example: 'jwalker'
+      amount:
+        type: integer
+        format: int64
+        example: 213
