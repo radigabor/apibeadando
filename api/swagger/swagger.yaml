@@ -238,7 +238,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse" 
   /users/balance:
-    x-swagger-router-controller: balance
+    x-swagger-router-controller: users
     put:
       tags:
         - balance
