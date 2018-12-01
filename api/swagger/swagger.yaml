@@ -295,6 +295,7 @@ paths:
         '405':
           description: Invalid input
   /products/inventory:
+    x-swagger-router-controller: users
     get:
       tags:
         - products
@@ -312,6 +313,7 @@ paths:
             items:
               $ref: '#/definitions/Product'
   /products/buy:
+    x-swagger-router-controller: users
     post:
       tags:
         - store
