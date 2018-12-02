@@ -35,12 +35,10 @@ function placeOrder(req, res) {
         }
         var product = db.getObject('products', { name: Order.product });
         var user = db.getObject('users', { username: Order.username })
-        console.log("szia megtalaltam mindent")
         if (product.cost > user.balance) {
             const response = "Not enough money";
             return res.status(400).send(response);
         } else {
-            console.log("szia van penzem")
             var Transaction = {
                 username: user.username,
                 product: product.name,
