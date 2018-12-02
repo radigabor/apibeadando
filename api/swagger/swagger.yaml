@@ -1,33 +1,26 @@
 swagger: "2.0"
 info:
-  version: "1.0.1"
-  title: Penztarca API
-# during dev, should point to your local machine
+  version: "1.0.0"
+  title: ApiBeadando MobilPenztarca API
 host: localhost:10010
-# basePath prefixes all resource paths 
 basePath: /
-# 
 schemes:
-  # tip: remove http to make production-grade
   - http
-  # - https
-# format of bodies a client can send (Content-Type)
 consumes:
   - application/json
-# format of the responses to the client (Accepts)
 produces:
   - application/json
 tags:
   - name: 'Users'
-    description: Operations for Users
+    description: Operations for user handling
   - name: 'Authentication'
-    description: Authentication operations
-  - name: 'Products'
-    description: Product operations
+    description: Operations for authentication handling
+  - name: 'Items'
+    description: Operations for item handling
   - name: 'Store'
-    description: Store operations
+    description: Operations for store handling
   - name: 'Balance'
-    description: Balance change operations
+    description: Operations for balance handling
 securityDefinitions:
   ApiKeyAuth:
     type: apiKey
@@ -35,11 +28,9 @@ securityDefinitions:
     name: X-Session-ID
 paths:
   /users:
-    # binds a127 app logic to a route
     x-swagger-router-controller: users
     post:
       description: Creates a new user with a pair of credentials
-      # used as the method name of the controller
       operationId: createUser
       tags:
       - "Users"
@@ -54,9 +45,7 @@ paths:
         "200":
           description: Success
           schema:
-            # a pointer to a definition
             $ref: "#/definitions/CreateUserResponse"
-        # responses may fall through to errors
         default:
           description: Error
           schema:
@@ -65,7 +54,6 @@ paths:
       description: Deletes given user
       security:
         - ApiKeyAuth: []
-      # used as the method name of the controller
       operationId: deleteUser
       tags:
       - "Users"
@@ -80,9 +68,7 @@ paths:
         "200":
           description: Success
           schema:
-            # a pointer to a definition
             $ref: "#/definitions/DeleteUserResponse"
-        # responses may fall through to errors
         default:
           description: Error
           schema:
@@ -91,7 +77,6 @@ paths:
       description: Gets all users
       security:
         - ApiKeyAuth: []
-      # used as the method name of the controller
       operationId: getUser
       tags:
       - "Users"
@@ -102,9 +87,7 @@ paths:
           schema:
             type: array
             items:
-            # a pointer to a definition
               $ref: "#/definitions/GetUserResponse"
-        # responses may fall through to errors
         default:
           description: Error
           schema:
@@ -117,7 +100,7 @@ paths:
       tags:
         - Balance
       summary: Updated balance
-      description: Updates the balance
+      description: Updates the balance of given user
       operationId: updateBalance
       produces:
         - application/xml
@@ -125,7 +108,7 @@ paths:
       parameters:
         - name: username
           in: path
-          description: name that need to be updated
+          description: name of user
           required: true
           type: string
         - in: body
@@ -136,13 +119,13 @@ paths:
             $ref: '#/definitions/UpdateBalanceCredentials'
       responses:
         '200':
-          description: successful operation
+          description: successful
           schema:
             $ref: '#/definitions/User'
         '400':
-          description: Invalid amount supplied
+          description: Invalid amount 
         '404':
-          description: User balance not found
+          description: balance not found
         default:
           description: Error
           schema:
@@ -196,13 +179,11 @@ paths:
         "200":
           description: Success
           schema:
-            # a pointer to a definition
             $ref: "#/definitions/AuthenticationResponse"
         "401":
           description: Unauthorized
           schema:
             $ref: "#/definitions/ErrorResponse"
-        # responses may fall through to errors
         default:
           description: Error
           schema:
@@ -226,26 +207,24 @@ paths:
         "200":
           description: Success
           schema:
-            # a pointer to a definition
             $ref: "#/definitions/AuthenticationResponse"
         "401":
           description: Unauthorized
           schema:
             $ref: "#/definitions/ErrorResponse"
-        # responses may fall through to errors
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /products:
-    x-swagger-router-controller: products
+  /items:
+    x-swagger-router-controller: items
     get:
       security:
         - ApiKeyAuth: []
-      description: Finds products
-      operationId: getProducts
+      description: Finds items
+      operationId: getItems
       tags:
-      - "Products"
+      - "Items"
       parameters: []
       responses:
         "200":
@@ -253,13 +232,11 @@ paths:
           schema:
             type: 'array'
             items:
-              # a pointer to a definition
-              $ref: "#/definitions/Product"
+              $ref: "#/definitions/Item"
         "401":
           description: Unauthorized
           schema:
             $ref: "#/definitions/ErrorResponse"
-        # responses may fall through to errors
         default:
           description: Error
           schema:
@@ -267,70 +244,66 @@ paths:
     post:
       security:
         - ApiKeyAuth: []
-      description: Creates product
-      operationId: createProduct
+      description: Creates given item
+      operationId: createItem
       tags:
-      - "Products"
+      - "Items"
       parameters:
-        - name: product
+        - name: item
           required: true
           in: body
-          description: adding product
+          description: adding item
           schema:
-            $ref: "#/definitions/Product"
+            $ref: "#/definitions/Item"
       responses:
         "200":
           description: Success
           schema:
-            # a pointer to a definition
             $ref: "#/definitions/CreateProductResponse"
         "401":
           description: Unauthorized
           schema:
             $ref: "#/definitions/ErrorResponse"
-        # responses may fall through to errors
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse" 
-  /products/item:
-    x-swagger-router-controller: products
+  /items/item:
+    x-swagger-router-controller: items
     get:
       security:
         - ApiKeyAuth: []
-      description: Get product with the given name
-      operationId: findProduct
+      description: Get item with the given name
+      operationId: findItem
       tags:
-      - "Products"
+      - "Items"
       parameters:
         - name: productName
           in: query
-          description: Product name
+          description: Item name
           required: true
           type: string
       responses:
         "200":
           description: Success
           schema:
-            # a pointer to a definition
-            $ref: "#/definitions/Product"
+            $ref: "#/definitions/Item"
         "401":
           description: Unauthorized
           schema:
             $ref: "#/definitions/ErrorResponse"
-        # responses may fall through to errors
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /products/buy:
-    x-swagger-router-controller: products
+  /items/buy:
+    x-swagger-router-controller: items
     post:
       security:
         - ApiKeyAuth: []
       tags:
         - Store
-      summary: Place an order
+      summary: Buy something
       description: ''
       operationId: placeOrder
       produces:
@@ -352,8 +325,8 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /products/buy/{username}:
-    x-swagger-router-controller: products
+  /items/buy/{username}:
+    x-swagger-router-controller: items
     get:
       security:
         - ApiKeyAuth: []
@@ -381,7 +354,6 @@ paths:
             $ref: "#/definitions/ErrorResponse"
   /swagger:
     x-swagger-pipe: swagger_raw
-# complex objects have schema definitions
 definitions:
   User:
     required:
@@ -428,18 +400,18 @@ definitions:
       sessionID:
         type: string
         example: 'axd43xs'
-  Product:
+  Item:
     required:
       - name
-      - cost
+      - price
     properties:
       name:
         type: string
         example: 'Avengers Infinity War'
-      cost:
-        type: integer
-        format: int64
-        example: 1234
+      price:
+        type: number
+        minimum: 0
+        example: 213
   ErrorResponse:
     type: object
     required:
@@ -476,17 +448,18 @@ definitions:
     type: object
     required:
       - username
-      - product
-      - cost
+      - item
+      - price
       - date
     properties:
       username:
           type: string
-      product:
+      item:
         type: string
-      cost:
-        type: integer
-        format: int64
+      price:
+        type: number
+        minimum: 0
+        example: 213
       date:
         type: string
         format: date-time
@@ -496,9 +469,9 @@ definitions:
     type: object
     required:
       - username
-      - product
+      - item
     properties:
       username:
         type: string
-      product:
+      item:
         type: string
