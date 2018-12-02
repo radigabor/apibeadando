@@ -63,6 +63,8 @@ paths:
             $ref: "#/definitions/ErrorResponse"
     delete:
       description: Creates a new user with a pair of credentials
+      security:
+        - ApiKeyAuth: []
       # used as the method name of the controller
       operationId: deleteUser
       tags:
@@ -87,6 +89,8 @@ paths:
             $ref: "#/definitions/ErrorResponse"
     get:
       description: Creates a new user with a pair of credentials
+      security:
+        - ApiKeyAuth: []
       # used as the method name of the controller
       operationId: getUser
       tags:
@@ -105,6 +109,67 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /users/balance/{username}:
+    x-swagger-router-controller: users
+    put:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Balance
+      summary: Updated balance
+      description: Updates the balance
+      operationId: updateBalance
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: username
+          in: path
+          description: name that need to be updated
+          required: true
+          type: string
+        - in: body
+          name: amount
+          description: Updated user object
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateBalanceCredentials'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/User'
+        '400':
+          description: Invalid amount supplied
+        '404':
+          description: User balance not found
+    get:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Balance
+      summary: Get balance
+      description: ''
+      operationId: getBalance
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: username
+          in: path
+          description: The user name for getting balance
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/User'
+        '405':
+          description: Invalid input
   /authentication/login:
     x-swagger-router-controller: authentication
     post:
@@ -137,6 +202,8 @@ paths:
   /authentication/logout:
     x-swagger-router-controller: authentication
     get:
+      security:
+        - ApiKeyAuth: []
       description: Authenticates a user with a pair of credentials and returns a sessionID
       operationId: logout
       tags:
@@ -165,6 +232,8 @@ paths:
   /products:
     x-swagger-router-controller: products
     get:
+      security:
+        - ApiKeyAuth: []
       description: Find products
       operationId: getProducts
       tags:
@@ -188,6 +257,8 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
     post:
+      security:
+        - ApiKeyAuth: []
       description: Create product
       operationId: createProduct
       tags:
@@ -217,6 +288,8 @@ paths:
   /products/{productName}:
     x-swagger-router-controller: products
     get:
+      security:
+        - ApiKeyAuth: []
       description: Get product with the given name
       operationId: findProduct
       tags:
@@ -242,66 +315,11 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse" 
-  /users/balance/{username}:
-    x-swagger-router-controller: users
-    put:
-      tags:
-        - Balance
-      summary: Updated balance
-      description: Updates the balance
-      operationId: updateBalance
-      produces:
-        - application/xml
-        - application/json
-      parameters:
-        - name: username
-          in: path
-          description: name that need to be updated
-          required: true
-          type: string
-        - in: body
-          name: amount
-          description: Updated user object
-          required: true
-          schema:
-            $ref: '#/definitions/UpdateBalanceCredentials'
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/User'
-        '400':
-          description: Invalid amount supplied
-        '404':
-          description: User balance not found
-    get:
-      tags:
-        - Balance
-      summary: Get balance
-      description: ''
-      operationId: getBalance
-      consumes:
-        - application/json
-        - application/xml
-      produces:
-        - application/xml
-        - application/json
-      parameters:
-        - name: username
-          in: path
-          description: The user name for getting balance
-          required: true
-          type: string
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/User'
-        '405':
-          description: Invalid input
   /products/inventory:
     x-swagger-router-controller: products
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Products
       summary: Returns inventories
@@ -320,6 +338,8 @@ paths:
   /products/buy:
     x-swagger-router-controller: products
     post:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Store
       summary: Place an order
@@ -343,6 +363,8 @@ paths:
         '400':
           description: Invalid Order
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Store
       summary: 'get transactions'
