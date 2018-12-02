@@ -22,8 +22,6 @@ tags:
     description: Operations about Netflix Users
   - name: 'Authentication'
     description: Authentication operations
-  - name: 'Videos'
-    description: Operations about Netflix Videos
 securityDefinitions:
   ApiKeyAuth:
     type: apiKey
@@ -211,6 +209,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse" 
   /products/{productName}:
+    x-swagger-router-controller: products
     get:
       description: Get product with the given name
       operationId: findProduct
@@ -295,7 +294,7 @@ paths:
         '405':
           description: Invalid input
   /products/inventory:
-    x-swagger-router-controller: users
+    x-swagger-router-controller: products
     get:
       tags:
         - products
@@ -313,7 +312,7 @@ paths:
             items:
               $ref: '#/definitions/Product'
   /products/buy:
-    x-swagger-router-controller: users
+    x-swagger-router-controller: products
     post:
       tags:
         - store
@@ -324,12 +323,12 @@ paths:
         - application/xml
         - application/json
       parameters:
-        - in: body
-          name: body
+        - name: purchase
+          in: body
           description: order placed for purchasing
           required: true
           schema:
-            $ref: '#/definitions/Product'
+            $ref: '#/definitions/MakePurchase'
       responses:
         '200':
           description: successful operation
@@ -467,3 +466,13 @@ definitions:
         format: int64
     xml:
       name: Transaction
+  MakePurchase:
+    type: object
+    required:
+      - username
+      - product
+    properties:
+      username:
+        type: string
+      product:
+        type: string
