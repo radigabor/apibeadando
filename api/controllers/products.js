@@ -21,9 +21,11 @@ function createProduct(req, res) {
         var x = db.createObject('products', Product);
         return res.json(x._id);
     } catch (error) {
-        return res.send(400, {
-            message: error.message
-        });
+        var x = error.message;
+        const response = {
+            message: x
+        }
+        return res.status(400).json(response);
     }
 }
 
@@ -34,9 +36,11 @@ function deleteProduct(req, res) {
         var x = db.getObjects('products');
         return res.json(x);
     } catch (error) {
-        return res.send(400, {
-            message: error.message
-        });
+        var x = error.message;
+        const response = {
+            message: x
+        }
+        return res.status(400).json(response);
     }
 }
 
@@ -45,9 +49,11 @@ function getProducts(req, res) {
         var x = db.getObjects('products');
         return res.json(x);
     } catch (error) {
-        return res.send(400, {
-            message: error.message
-        });
+        var x = error.message;
+        const response = {
+            message: x
+        }
+        return res.status(400).json(response);
     }
 }
 
@@ -57,9 +63,11 @@ function findProduct(req, res) {
         var x = db.getObject('products', productName);
         return res.json(x);
     } catch (error) {
-        return res.send(400, {
-            message: error.message
-        });
+        var x = error.message;
+        const response = {
+            message: x
+        }
+        return res.status(400).json(response);
     }
 }
 
@@ -98,7 +106,11 @@ function placeOrder(req, res) {
             return res.status(200).json(z);
         }
     } catch (error) {
-        return res.status(400).send(error.message);
+        var x = error.message;
+        const response = {
+            message: x
+        }
+        return res.status(400).json(response);
     }
 }
 
@@ -109,6 +121,10 @@ function getTransactions(req, res) {
 
         return res.status(200).json(z);
     } catch (error) {
-        return res.status(400).send(error.message);
+        var x = error.message;
+        const response = {
+            message: x
+        }
+        return res.status(400).json(response);
     }
 }

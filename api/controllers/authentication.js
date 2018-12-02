@@ -24,9 +24,11 @@ function login(req, res) {
 
         return res.json(z._id);
     } catch (error) {
-        return res.send(400, {
-            message: error.message
-        });
+        var x = error.message;
+        const response = {
+            message: x
+        }
+        return res.status(400).json(response);
     }
 }
 
@@ -40,8 +42,10 @@ function logout(req, res) {
         var x = db.getObject('users', xsessionid);
         return res.json(xsessionid);
     } catch (error) {
-        return res.send(400, {
-            message: error.message
-        });
+        var x = error.message;
+        const response = {
+            message: x
+        }
+        return res.status(400).json(response);
     }
 }

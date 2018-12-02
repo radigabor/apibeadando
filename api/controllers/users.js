@@ -23,9 +23,11 @@ function createUser(req, res) {
         var x = db.createObject('users', User);
         return res.json(x._id);
     } catch (error) {
-        return res.send(400, {
-            message: error.message
-        });
+        var x = error.message;
+        const response = {
+            message: x
+        }
+        return res.status(400).json(response);
     }
   }
   
@@ -34,9 +36,11 @@ function deleteUser(req, res) {
         var x = db.deleteObject('users', {username:req.body.username});
         return res.json(x._id);
     } catch (error) {
-        return res.send(400, {
-            message: error.message
-        });
+        var x = error.message;
+        const response = {
+            message: x
+        }
+        return res.status(400).json(response);
     }
   }
   
@@ -45,9 +49,11 @@ function getUser(req, res) {
         var x = db.getObjects('users');
         return res.json(x);
     } catch (error) {
-        return res.send(400, {
-            message: error.message
-        });
+        var x = error.message;
+        const response = {
+            message: x
+        }
+        return res.status(400).json(response);
     }
   }
   
@@ -56,9 +62,11 @@ function getBalance(req, res) {
         var x = db.getObject('users', {username:req.swagger.params.username.value});
         return res.json(x.balance);
     } catch (error) {
-        return res.send(400, {
-            message: error.message
-        });
+        var x = error.message;
+        const response = {
+            message: x
+        }
+        return res.status(400).json(response);
     }
   }
   
@@ -78,8 +86,10 @@ function updateBalance(req, res) {
         updated_user = db.getObject('users', {username:username});
         return res.json(updated_user);
     } catch (error) {
-        return res.send(400, {
-            message: error.message
-        });
+        var x = error.message;
+        const response = {
+            message: x
+        }
+        return res.status(400).json(response);
     }
   }
