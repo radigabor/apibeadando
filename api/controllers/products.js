@@ -1,5 +1,7 @@
 var db = require('./db');
 db.initCollection('products');
+db.initCollection('transactions');
+db.initCollection('users');
 
 module.exports = {
     createProduct: createProduct,
@@ -22,30 +24,43 @@ function createProduct(req, res) {
             message: error.message
         });
     }
-  }
-  
-function placeOrder(req, res){
+}
+
+function placeOrder(req, res) {
     try {
         var d = new Date();
         var Order = {
-            username : req.body.username,
-            product : req.body.product,
-            date : d
-        };
-        console.log("Order", Order)
-        var x = db.createObject('products', Order);
-        return res.json(x._id);
+            username: req.body.username,
+            product: req.body.product,
+        }
+        var product = db.getObject('products', { name: Order.product });
+        var user = db.getObject('users', { username: Order.username })
+        console.log("szia megtalaltam mindent")
+        if (product.cost > user.balance) {
+            const response = "Not enough money";
+            return res.status(400).send(response);
+        } else {
+            console.log("szia van penzem")
+            var Transaction = {
+                username: user.username,
+                product: product.name,
+                cost: product.cost,
+                date: d
+            }
+            var x = db.createObject('transactions', Transaction)
+            var z = db.getObject('transactions', { username: Transaction.username })
+            const response = "Succesfully created transaction";
+            return res.status(200).json(z);
+        }
     } catch (error) {
-        return res.send(400, {
-            message: error.message
-        });
+        return res.status(400).send(error.message);
     }
-    
+
 }
-  
+
 function deleteProduct(req, res) {
     try {
-        
+
         db.deleteObject('products', product);
         var x = db.getObjects('products');
         return res.json(x);
@@ -54,10 +69,10 @@ function deleteProduct(req, res) {
             message: error.message
         });
     }
-  }
-  
+}
+
 function getProducts(req, res) {
-    try {        
+    try {
         var x = db.getObjects('products');
         return res.json(x);
     } catch (error) {
@@ -65,10 +80,10 @@ function getProducts(req, res) {
             message: error.message
         });
     }
-  }
-  
+}
+
 function findProduct(req, res) {
-    try {        
+    try {
         var productName = req.params.productName;
         var x = db.getObject('products', productName);
         return res.json(x);
@@ -77,4 +92,4 @@ function findProduct(req, res) {
             message: error.message
         });
     }
-  }
+}

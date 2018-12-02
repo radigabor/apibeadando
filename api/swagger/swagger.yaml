@@ -449,10 +449,13 @@ definitions:
   Transaction:
     type: object
     required:
+      - username
       - product
       - cost
       - date
     properties:
+      username:
+          type: string
       product:
         type: string
       cost:
@@ -461,9 +464,6 @@ definitions:
       date:
         type: string
         format: date-time
-      id:
-        type: integer
-        format: int64
     xml:
       name: Transaction
   MakePurchase:
