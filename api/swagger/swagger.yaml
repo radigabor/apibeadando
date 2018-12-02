@@ -285,7 +285,7 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse" 
-  /products/{productName}:
+  /products/item:
     x-swagger-router-controller: products
     get:
       security:
@@ -296,7 +296,7 @@ paths:
       - "Products"
       parameters:
         - name: productName
-          in: path
+          in: query
           description: Product name
           required: true
           type: string
