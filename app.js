@@ -2,12 +2,11 @@
 
 var SwaggerExpress = require('swagger-express-mw');
 var app = require('express')();
-module.exports = app; // for testing
-
 var cors = require('cors');
-app.use(cors());
-
 const swaggerSecurity = require('./api/helpers/swagger_security.js');
+
+module.exports = app; // for testing
+app.use(cors());
 
 var config = {
   appRoot: __dirname, // required config

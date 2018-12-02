@@ -39,6 +39,15 @@ function placeOrder(req, res) {
             const response = "Not enough money";
             return res.status(400).send(response);
         } else {
+            //updating balance for user if enough money
+            var updatedUser = {
+                username: user.username,
+                password: user.password,
+                balance: user.balance - product.cost
+            };
+            db.updateObject('users', { username: user.username }, updatedUser);
+
+            //creating transaction
             var Transaction = {
                 username: user.username,
                 product: product.name,

@@ -53,10 +53,7 @@ function getUser(req, res) {
   
 function getBalance(req, res) {
     try {        
-        console.log("reqpath:", req.swagger.params.username.value);
         var x = db.getObject('users', {username:req.swagger.params.username.value});
-        console.log("x:", x);
-        console.log("xb:", x.balance);
         return res.json(x.balance);
     } catch (error) {
         return res.send(400, {
