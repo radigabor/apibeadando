@@ -8,7 +8,8 @@ module.exports = {
     deleteProduct: deleteProduct,
     getProducts: getProducts,
     findProduct: findProduct,
-    placeOrder: placeOrder
+    placeOrder: placeOrder,
+    getTransactions: getTransactions
 };
 
 function createProduct(req, res) {
@@ -26,6 +27,43 @@ function createProduct(req, res) {
     }
 }
 
+function deleteProduct(req, res) {
+    try {
+
+        db.deleteObject('products', product);
+        var x = db.getObjects('products');
+        return res.json(x);
+    } catch (error) {
+        return res.send(400, {
+            message: error.message
+        });
+    }
+}
+
+function getProducts(req, res) {
+    try {
+        var x = db.getObjects('products');
+        return res.json(x);
+    } catch (error) {
+        return res.send(400, {
+            message: error.message
+        });
+    }
+}
+
+function findProduct(req, res) {
+    try {
+        var productName = req.params.productName;
+        var x = db.getObject('products', productName);
+        return res.json(x);
+    } catch (error) {
+        return res.send(400, {
+            message: error.message
+        });
+    }
+}
+
+//Transactions
 function placeOrder(req, res) {
     try {
         var d = new Date();
@@ -62,41 +100,15 @@ function placeOrder(req, res) {
     } catch (error) {
         return res.status(400).send(error.message);
     }
-
 }
 
-function deleteProduct(req, res) {
+function getTransactions(req, res) {
     try {
+        var username = req.swagger.params.username.value;
+        var z = db.getObjects('transactions', { username: username });
 
-        db.deleteObject('products', product);
-        var x = db.getObjects('products');
-        return res.json(x);
+        return res.status(200).json(z);
     } catch (error) {
-        return res.send(400, {
-            message: error.message
-        });
-    }
-}
-
-function getProducts(req, res) {
-    try {
-        var x = db.getObjects('products');
-        return res.json(x);
-    } catch (error) {
-        return res.send(400, {
-            message: error.message
-        });
-    }
-}
-
-function findProduct(req, res) {
-    try {
-        var productName = req.params.productName;
-        var x = db.getObject('products', productName);
-        return res.json(x);
-    } catch (error) {
-        return res.send(400, {
-            message: error.message
-        });
+        return res.status(400).send(error.message);
     }
 }

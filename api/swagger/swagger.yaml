@@ -343,6 +343,7 @@ paths:
         '400':
           description: Invalid Order
   /products/buy/{username}:
+    x-swagger-router-controller: products
     get:
       security:
         - ApiKeyAuth: []
