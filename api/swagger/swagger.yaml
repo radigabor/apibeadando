@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  version: "0.0.1"
+  version: "1.0.1"
   title: Penztarca API
 # during dev, should point to your local machine
 host: localhost:10010
@@ -62,7 +62,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
     delete:
-      description: Creates a new user with a pair of credentials
+      description: Deletes given user
       security:
         - ApiKeyAuth: []
       # used as the method name of the controller
@@ -88,7 +88,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
     get:
-      description: Creates a new user with a pair of credentials
+      description: Gets all users
       security:
         - ApiKeyAuth: []
       # used as the method name of the controller
@@ -148,7 +148,7 @@ paths:
         - ApiKeyAuth: []
       tags:
         - Balance
-      summary: Get balance
+      summary: Gets balance of user
       description: ''
       operationId: getBalance
       consumes:
@@ -204,7 +204,7 @@ paths:
     get:
       security:
         - ApiKeyAuth: []
-      description: Authenticates a user with a pair of credentials and returns a sessionID
+      description: Logs out user
       operationId: logout
       tags:
       - "Authentication"
@@ -234,7 +234,7 @@ paths:
     get:
       security:
         - ApiKeyAuth: []
-      description: Find products
+      description: Finds products
       operationId: getProducts
       tags:
       - "Products"
@@ -259,7 +259,7 @@ paths:
     post:
       security:
         - ApiKeyAuth: []
-      description: Create product
+      description: Creates product
       operationId: createProduct
       tags:
       - "Products"
@@ -314,27 +314,7 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse" 
-  /products/inventory:
-    x-swagger-router-controller: products
-    get:
-      security:
-        - ApiKeyAuth: []
-      tags:
-        - Products
-      summary: Returns inventories
-      description: Returns the products
-      operationId: getProduct
-      produces:
-        - application/json
-      parameters: []
-      responses:
-         "200":
-          description: Success
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Product'
+            $ref: "#/definitions/ErrorResponse"
   /products/buy:
     x-swagger-router-controller: products
     post:
@@ -362,16 +342,21 @@ paths:
             $ref: '#/definitions/Transaction'
         '400':
           description: Invalid Order
+  /products/buy/{username}:
     get:
       security:
         - ApiKeyAuth: []
       tags:
         - Store
-      summary: 'get transactions'
+      summary: 'Gets transactions for user'
       operationId: getTransactions
       produces:
         - application/json
-      parameters: []
+      parameters: 
+        - in: path
+          name: username
+          required: true
+          type: string
       responses:
         '200':
           description: successful operation
