@@ -30,9 +30,7 @@ function createItem(req, res) {
 
 function getItems(req, res) {
     try {
-        console.log("hello")
         var neededObjects = db.getObjects('items');
-        console.log(neededObjects)
         return res.status(200).json(neededObjects);
     } catch (error) {
         var errormessage = error.message;
